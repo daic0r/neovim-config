@@ -68,19 +68,23 @@ require("lazy").setup({
 		'nvim-lualine/lualine.nvim',
 		dependencies = { 'nvim-tree/nvim-web-devicons' },
 	},
+   --[[
    { "lukas-reineke/indent-blankline.nvim",
       main = "ibl",
       opts = {},
       config = function()
-         require("ibl").setup()
+         require("ibl").setup({
+            debounce = 2000,
+         })
       end
    },
+   --]]
    'mfussenegger/nvim-dap',
    {
       'rcarriga/nvim-dap-ui',
-      config = function()
-         require "dapui".setup()
-      end
+   },
+   {
+      'theHamsta/nvim-dap-virtual-text',
    },
    'simrat39/rust-tools.nvim',
    {
