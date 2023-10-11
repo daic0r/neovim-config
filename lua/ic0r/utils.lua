@@ -1,5 +1,4 @@
 local M = {}
-print("Loading utils.lua")
 
 local find_in_array = function(tbl, pred)
    for k,v in ipairs(tbl) do
