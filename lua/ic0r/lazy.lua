@@ -85,6 +85,9 @@ require("lazy").setup({
    },
    {
       'theHamsta/nvim-dap-virtual-text',
+      config = function()
+         require('nvim-dap-virtual-text').setup()
+      end
    },
    'simrat39/rust-tools.nvim',
    {
