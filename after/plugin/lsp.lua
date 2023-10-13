@@ -62,17 +62,16 @@ require('mason-lspconfig').setup({
 --
 local cmp = require("cmp")
 local cmp_select = { behavior = cmp.SelectBehavior, count = 1 }
-local cmp_mappings = cmp.mapping.preset.insert({
-	['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
-	['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
-   ['<C-Down>'] = function()
-      print("scroll")
-      cmp.mapping.scroll_docs(-4)
-   end,
-   ['<C-Up>'] = cmp.mapping.scroll_docs(4),
-   ['<C-e>'] = cmp.mapping.abort(),
-   ['<CR>'] = cmp.mapping.confirm({ select = true }),
-	['<C-Space>'] = cmp.mapping.complete(),
+cmp.setup({
+   mapping = cmp.mapping.preset.insert({
+      ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
+      ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
+      ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+      ['<C-u>'] = cmp.mapping.scroll_docs(4),
+      ['<C-e>'] = cmp.mapping.abort(),
+      ['<CR>'] = cmp.mapping.confirm({ select = true }),
+      ['<C-Space>'] = cmp.mapping.complete(),
+   })
 })
 
 lsp_zero.on_attach(function(client, bufnr)

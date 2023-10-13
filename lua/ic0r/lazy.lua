@@ -39,7 +39,7 @@ require("lazy").setup({
 	'nvim-treesitter/playground',
 	'theprimeagen/harpoon',
 	'mbbill/undotree',
-	'tpope/vim-fugitive',
+	-- 'tpope/vim-fugitive',
 	{
 		"williamboman/mason.nvim",
 		config = function()
@@ -109,6 +109,15 @@ require("lazy").setup({
       dependencies = "nvim-tree/nvim-web-devicons",
    },
    'voldikss/vim-floaterm',
+   {
+     'stevearc/dressing.nvim',
+     lazy = true,
+     opts = {},
+   },
+   {
+      'daic0r/dap-helper.nvim',
+      dependencies = { "rcarriga/nvim-dap-ui", "mfussenegger/nvim-dap" },
+   }
    --[[
    {
       "m4xshen/hardtime.nvim",

@@ -29,5 +29,6 @@ vim.opt.colorcolumn = "80"
 
 vim.opt.cursorline = true
 
+vim.g.loaded_matchparen = 1
 vim.g.matchparen_timeout = 2
 vim.g.matchparen_insert_timeout = 2
