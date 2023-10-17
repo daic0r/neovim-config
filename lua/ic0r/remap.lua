@@ -32,3 +32,5 @@ vim.keymap.set("n", "<C-left>", ":tabp<CR>")
 vim.keymap.set("n", "<C-right>", ":tabn<CR>")
 
 vim.keymap.set("n", "<M-o>", ":ClangdSwitchSourceHeader<CR>")
+
+vim.keymap.set("n", "<leader>,", "<Plug>PlenaryTestFile")

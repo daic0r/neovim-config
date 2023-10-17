@@ -1,4 +1,5 @@
 local dap = require('dap')
+local dap_helper = require("dap-helper")
 
 vim.keymap.set("n", "<F9>", dap.toggle_breakpoint)
 vim.keymap.set("n", "<leader>dcb", function() dap.set_breakpoint(vim.fn.input("Breakpoint condition: ")) end)
@@ -9,13 +10,13 @@ vim.keymap.set("n", "<F5>", function()
    if #dap.status() == 0 then
       local ret = os.execute("cargo build > /dev/null")
       if ret ~= 0 then
-         print("Build failed")
+         vim.notify("Build failed", vim.log.levels.ERROR)
          return
       end
-      local dap_helper = require("dap-helper")
-      dap_helper.setup()
-      print(dap_helper.get_launch_args())
-      dap_helper.set_launch_args()
+      dap_helper.set_launch_args(dap_helper.get_launch_args())
+      local file = vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf())
+      local filetype = vim.api.nvim_get_option_value("filetype", { buf = vim.api.nvim_get_current_buf()})
+      dap_helper.set_startup_program(dap_helper.get_startup_program(filetype))
    end
    dap.continue()
 end)
