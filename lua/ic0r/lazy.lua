@@ -18,6 +18,7 @@ require("lazy").setup({
 	    -- or                              , branch = '0.1.x',
 	    dependencies = { 'nvim-lua/plenary.nvim' }
     },
+    --[[
     {
 	    "folke/tokyonight.nvim",
 	    lazy = false,
@@ -35,6 +36,8 @@ require("lazy").setup({
          vim.cmd.colorscheme("tokyonight")
 		end,
 	},
+   --]]
+   { "bluz71/vim-nightfly-colors", name = "nightfly", lazy = false, priority = 1000 },
 	{
 		'nvim-treesitter/nvim-treesitter',
 		config = function()
@@ -65,7 +68,6 @@ require("lazy").setup({
          })
       end
    },
-	{'VonHeikemen/lsp-zero.nvim', branch = 'v3.x'},
 	{'neovim/nvim-lspconfig'},
 	{'hrsh7th/cmp-nvim-lsp'},
    {
