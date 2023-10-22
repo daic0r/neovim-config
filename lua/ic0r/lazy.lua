@@ -24,7 +24,15 @@ require("lazy").setup({
 	    priority = 1000,
 	    opts = {},
 	    config = function()
-		    vim.cmd.colorscheme('tokyonight-night')
+          require("tokyonight").setup({
+             style = "night",
+             transparent = true,
+             styles = {
+                sidebars = "transparent",
+                floats = "transparent"
+             }
+            })
+         vim.cmd.colorscheme("tokyonight")
 		end,
 	},
 	{
@@ -62,7 +70,14 @@ require("lazy").setup({
 	{'hrsh7th/cmp-nvim-lsp'},
    {
       'hrsh7th/nvim-cmp',
-      event = "InsertEnter"
+      event = "InsertEnter",
+      dependencies = {
+         'hrsh7th/cmp-buffer',
+         'hrsh7th/cmp-path',
+         'saadparwaiz1/cmp_luasnip',
+         'rafamadriz/friendly-snippets',
+         'L3MON4D3/LuaSnip',
+      }
    },
 	{'L3MON4D3/LuaSnip'},
 	{
@@ -113,14 +128,30 @@ require("lazy").setup({
      'stevearc/dressing.nvim',
      lazy = true,
      opts = {},
+     event = "VeryLazy"
    },
    'tpope/vim-surround',
+   {
+      'christoomey/vim-tmux-navigator'
+   },
    {
       dir = "~/programming/neovim/plugins/dap-helper",
       config = function()
          require("dap-helper").setup()
       end,
    },
+   --[[
+   {
+      "catppuccin/nvim",
+      name = "catppuccin",
+      priority = 1000,
+      config = function()
+         require("catppuccin").setup({
+            transparent_background = true
+         })
+      end
+   }
+   --]]
    --[[
    {
       'daic0r/dap-helper.nvim',
@@ -138,4 +169,16 @@ require("lazy").setup({
    },
    --]]
 
-}, opts)
+}, 
+{
+   install = {
+      colorscheme =  {"tokyonight" },
+   },
+   checker = {
+      enable = true,
+      notify = false
+   },
+   change_detection = {
+      notify = false
+   }
+})

@@ -8,13 +8,14 @@ vim.keymap.set("n", "<F11>", dap.step_into)
 vim.keymap.set("n", "<S-F11>", dap.step_out)
 vim.keymap.set("n", "<F5>", function()
    if #dap.status() == 0 then
-      local ret = os.execute("cargo build > /dev/null")
-      if ret ~= 0 then
-         vim.notify("Build failed", vim.log.levels.ERROR)
-         return
+      if dap_helper.get_build_cmd() then
+         local ret = os.execute(dap_helper.get_build_cmd() .. " > /dev/null 2>&1")
+         if ret ~= 0 then
+            vim.notify("Build failed", vim.log.levels.ERROR)
+            return
+         end
       end
-      dap_helper.set_launch_args(dap_helper.get_launch_args())
-      local file = vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf())
+      --dap_helper.set_launch_args(dap_helper.get_launch_args())
       local filetype = vim.api.nvim_get_option_value("filetype", { buf = vim.api.nvim_get_current_buf()})
       dap_helper.set_startup_program(dap_helper.get_startup_program(filetype))
    end
@@ -36,6 +37,27 @@ dap.configurations.rust = {
     env = {},
     runInTerminal = false,
   },
+}
+
+ dap.adapters.cppdbg = {
+    type = 'executable',
+    -- absolute path is important here, otherwise the argument in the `runInTerminal` request will default to $CWD/lldb-vscode
+    command = '/home/ic0r/.local/share/nvim/mason/bin/OpenDebugAD7',
+    name = "cppdbg"
+  }
+  dap.configurations.cpp = {
+    {
+      name = "Launch",
+      type = "cppdbg",
+      request = "launch",
+      program = function()
+        return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+      end,
+      cwd = '${workspaceFolder}',
+      stopOnEntry = false,
+      args = {},
+      runInTerminal = false,
+    },
 }
 
 dap.adapters.rust = {

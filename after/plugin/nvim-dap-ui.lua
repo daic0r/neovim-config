@@ -26,6 +26,9 @@ dapui.setup({
       position = "bottom",
       size = 10
    } },
+   render = {
+      max_type_length = 50,
+   },
 })
 
 utils.safe_set_keymap("n", "<leader>do", dapui.open)
