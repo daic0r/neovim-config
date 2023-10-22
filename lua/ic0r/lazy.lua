@@ -18,7 +18,6 @@ require("lazy").setup({
 	    -- or                              , branch = '0.1.x',
 	    dependencies = { 'nvim-lua/plenary.nvim' }
     },
-    --[[
     {
 	    "folke/tokyonight.nvim",
 	    lazy = false,
@@ -36,8 +35,19 @@ require("lazy").setup({
          vim.cmd.colorscheme("tokyonight")
 		end,
 	},
+   --[[
+   { 
+      "bluz71/vim-nightfly-colors",
+      name = "nightfly",
+      lazy = false,
+      priority = 1000,
+      config = function()
+         vim.g.nightflyCursorColor = true
+         vim.g.nightflyTransparent = true
+         vim.g.nightflyUndercurls = true
+      end
+   },
    --]]
-   { "bluz71/vim-nightfly-colors", name = "nightfly", lazy = false, priority = 1000 },
 	{
 		'nvim-treesitter/nvim-treesitter',
 		config = function()
