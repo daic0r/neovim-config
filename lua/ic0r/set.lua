@@ -23,11 +23,13 @@ vim.opt.termguicolors = true
 vim.opt.scrolloff = 8
 vim.opt.signcolumn = "yes"
 vim.opt.isfname:append("@-@")
+vim.opt.iskeyword:append("-")
 
 vim.opt.updatetime = 50
 vim.opt.colorcolumn = "80"
 
 vim.opt.cursorline = true
+vim.opt.guicursor=""
 
 vim.g.matchparen_timeout = 2
 vim.g.matchparen_insert_timeout = 2

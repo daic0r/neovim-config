@@ -18,9 +18,6 @@ vim.keymap.set("v", "<leader>y", "\"+y")
 vim.keymap.set("n", "<leader>Y", "\"+Y")
 
 vim.keymap.set("n", "Q", "<nop>")
-vim.keymap.set("n", "<leader>f", function()
-   vim.lsp.buf.format()
-end)
 
 -- Quickfix
 vim.keymap.set("n", "<C-k>", "<cmd>cnext<CR>zz")
@@ -33,7 +30,7 @@ vim.keymap.set("n", "<M-o>", ":ClangdSwitchSourceHeader<CR>")
 
 vim.keymap.set("n", "<leader>,", ":lua require('plenary.test_harness').test_file(vim.fn.expand('%:p'), { init = '~/.config/nvim/init.lua' })<CR>")
 --vim.keymap.set("n", "<leader>,", "<Plug>PlenaryTestFile")
-vim.keymap.set("n", "<C-left>", "<C-W><")
-vim.keymap.set("n", "<C-right>", "<C-W>>")
+vim.keymap.set("n", "<S-left>", "<C-W><")
+vim.keymap.set("n", "<S-right>", "<C-W>>")
 vim.keymap.set("n", "<S-Up>", "<C-W>-")
 vim.keymap.set("n", "<S-Down>", "<C-W>+")
