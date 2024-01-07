@@ -59,7 +59,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
    end
 })
 
-require('mason').setup({})
 local mason_lsp = require("mason-lspconfig")
 mason_lsp.setup({
    ensure_installed = {
