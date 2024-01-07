@@ -51,6 +51,14 @@ vim.api.nvim_create_autocmd('LspAttach', {
    end,
 })
 
+vim.api.nvim_create_autocmd('LspAttach', {
+   desc = 'Switch between header and implementation files',
+   pattern = { '*.cpp', '*.h' },
+   callback = function()
+      vim.keymap.set("n", "<M-o>", ":ClangdSwitchSourceHeader<CR>")
+   end
+})
+
 require('mason').setup({})
 local mason_lsp = require("mason-lspconfig")
 mason_lsp.setup({
