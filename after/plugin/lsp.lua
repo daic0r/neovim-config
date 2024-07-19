@@ -158,7 +158,34 @@ lspconfig["emmet_ls"].setup({
 })
 
 local luasnip = require("luasnip")
-require("luasnip.loaders.from_vscode").lazy_load()
+
+local kind_icons = {
+   Class = "ﴯ",
+   Color = "",
+   Constant = "",
+   Constructor = "",
+   Enum = "",
+   EnumMember = "",
+   Event = "",
+   Field = "",
+   File = "",
+   Folder = "",
+   Function = "",
+   Interface = "",
+   Keyword = "",
+   Method = "",
+   Module = "",
+   Operator = "",
+   Property = "ﰠ",
+   Reference = "",
+   Snippet = "",
+   Struct = "",
+   Text = "",
+   TypeParameter = "",
+   Unit = "",
+   Value = "",
+   Variable = "",
+}
 
 local cmp = require("cmp")
 local cmp_select = { behavior = cmp.SelectBehavior, count = 1 }
@@ -180,9 +207,31 @@ cmp.setup({
          luasnip.lsp_expand(args.body)
       end,
    },
+   formatting = {
+      format = function(entry, vim_item)
+         -- Kind icons
+         vim_item.kind = string.format("%s %s", kind_icons[vim_item.kind], vim_item.kind) --Concatonate the icons with name of the item-kind
+         vim_item.menu = ({
+            nvim_lsp = "[LSP]",
+            spell = "[Spellings]",
+            zsh = "[Zsh]",
+            buffer = "[Buffer]",
+            ultisnips = "[Snip]",
+            treesitter = "[Treesitter]",
+            calc = "[Calculator]",
+            nvim_lua = "[Lua]",
+            path = "[Path]",
+            nvim_lsp_signature_help = "[Signature]",
+            cmdline = "[Vim Command]"
+         })[entry.source.name]
+         return vim_item
+      end
+   },
    sources = cmp.config.sources({
+      { name = "luasnip" },-- option = { use_show_condition = false } },
       { name = "nvim_lsp" },
-      { name = "luasnip" },
+      { name = "nvim_lua" },
+      { name = "path" },
       { name = "buffer" },
       { name = "path" },
    })
