@@ -3,7 +3,7 @@ local format_group = vim.api.nvim_create_augroup("lsp_autoformat", { clear = fal
 vim.api.nvim_create_autocmd('LspAttach', {
    desc = 'LSP actions',
    callback = function(args)
-      local opts = { buffer = bufnr, remap = false }
+      local opts = { buffer = args.buf, remap = false }
 
       vim.keymap.set("n", "gd", "<cmd>Telescope lsp_definitions<CR>", opts)
       vim.keymap.set("n", "gt", "<cmd>Telescope lsp_type_definitions<CR>", opts)
@@ -30,7 +30,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
          end, { buffer = bufnr, desc = "[lsp] format" })
 
          -- format on save
-         --[[
          vim.api.nvim_clear_autocmds({ buffer = bufnr, group = format_group })
          vim.api.nvim_create_autocmd('BufWritePre', {
             buffer = bufnr,
@@ -40,7 +39,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
             end,
             desc = "[lsp] format on save",
          })
-         --]]
       end
 
       if client.supports_method("textDocument/rangeFormatting") then
@@ -48,6 +46,13 @@ vim.api.nvim_create_autocmd('LspAttach', {
             vim.lsp.buf.format({ bufnr = vim.api.nvim_get_current_buf() })
          end, { buffer = bufnr, desc = "[lsp] format" })
       end
+
+        --- Guard against servers without the signatureHelper capability
+        if client.server_capabilities.signatureHelpProvider then
+           require('lsp-overloads').setup(client, { })
+           vim.keymap.set("n", "<A-s>", ":LspOverloadsSignature<CR>", { noremap = true, silent = true, buffer = bufnr })
+           vim.keymap.set("i", "<A-s>", "<cmd>LspOverloadsSignature<CR>", { noremap = true, silent = true, buffer = bufnr })
+        end
    end,
 })
 
@@ -103,10 +108,10 @@ lspconfig["lua_ls"].setup {
    }
 }
 
---[[
  -- configure html server
  lspconfig["html"].setup({
    capabilities = lsp_capabilities,
+   filetypes = { "html", "ejs" },
  })
 
  -- configure typescript server with plugin
@@ -123,7 +128,6 @@ lspconfig["lua_ls"].setup {
  lspconfig["tailwindcss"].setup({
    capabilities = lsp_capabilities,
  })
- --]]
 
 -- configure svelte server
 lspconfig["svelte"].setup({
@@ -146,7 +150,7 @@ capabilities.textDocument.completion.completionItem.snippetSupport = true
 -- configure emmet language server
 lspconfig["emmet_ls"].setup({
    capabilities = lsp_capabilities,
-   filetypes = { "html", "typescriptreact", "javascriptreact", "css", "sass", "scss", "less", "svelte" },
+   filetypes = { "html", "typescriptreact", "javascriptreact", "css", "sass", "scss", "less", "svelte", "ejs" },
    init_options = {
       html = {
          options = {
