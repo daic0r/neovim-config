@@ -24,22 +24,22 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
       local bufnr = args.buf
       local client = vim.lsp.get_client_by_id(args.data.client_id)
-      -- if client.supports_method("textDocument/formatting") then
-      --    vim.keymap.set("n", "<Leader>f", function()
-      --       vim.lsp.buf.format({ bufnr = vim.api.nvim_get_current_buf() })
-      --    end, { buffer = bufnr, desc = "[lsp] format" })
-      --
-      --    -- format on save
-      --    vim.api.nvim_clear_autocmds({ buffer = bufnr, group = format_group })
-      --    vim.api.nvim_create_autocmd('BufWritePre', {
-      --       buffer = bufnr,
-      --       group = format_group,
-      --       callback = function()
-      --          vim.lsp.buf.format({ bufnr = bufnr, async = false })
-      --       end,
-      --       desc = "[lsp] format on save",
-      --    })
-      -- end
+      if client.supports_method("textDocument/formatting") then
+         vim.keymap.set("n", "<Leader>f", function()
+            vim.lsp.buf.format({ bufnr = vim.api.nvim_get_current_buf() })
+         end, { buffer = bufnr, desc = "[lsp] format" })
+
+         -- format on save
+         -- vim.api.nvim_clear_autocmds({ buffer = bufnr, group = format_group })
+         -- vim.api.nvim_create_autocmd('BufWritePre', {
+         --    buffer = bufnr,
+         --    group = format_group,
+         --    callback = function()
+         --       vim.lsp.buf.format({ bufnr = bufnr, async = false })
+         --    end,
+         --    desc = "[lsp] format on save",
+         -- })
+      end
 
       if client.supports_method("textDocument/rangeFormatting") then
          vim.keymap.set("x", "<Leader>f", function()
