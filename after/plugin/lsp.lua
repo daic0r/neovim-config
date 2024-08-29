@@ -24,22 +24,22 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
       local bufnr = args.buf
       local client = vim.lsp.get_client_by_id(args.data.client_id)
-      if client.supports_method("textDocument/formatting") then
-         vim.keymap.set("n", "<Leader>f", function()
-            vim.lsp.buf.format({ bufnr = vim.api.nvim_get_current_buf() })
-         end, { buffer = bufnr, desc = "[lsp] format" })
-
-         -- format on save
-         vim.api.nvim_clear_autocmds({ buffer = bufnr, group = format_group })
-         vim.api.nvim_create_autocmd('BufWritePre', {
-            buffer = bufnr,
-            group = format_group,
-            callback = function()
-               vim.lsp.buf.format({ bufnr = bufnr, async = false })
-            end,
-            desc = "[lsp] format on save",
-         })
-      end
+      -- if client.supports_method("textDocument/formatting") then
+      --    vim.keymap.set("n", "<Leader>f", function()
+      --       vim.lsp.buf.format({ bufnr = vim.api.nvim_get_current_buf() })
+      --    end, { buffer = bufnr, desc = "[lsp] format" })
+      --
+      --    -- format on save
+      --    vim.api.nvim_clear_autocmds({ buffer = bufnr, group = format_group })
+      --    vim.api.nvim_create_autocmd('BufWritePre', {
+      --       buffer = bufnr,
+      --       group = format_group,
+      --       callback = function()
+      --          vim.lsp.buf.format({ bufnr = bufnr, async = false })
+      --       end,
+      --       desc = "[lsp] format on save",
+      --    })
+      -- end
 
       if client.supports_method("textDocument/rangeFormatting") then
          vim.keymap.set("x", "<Leader>f", function()
@@ -47,12 +47,12 @@ vim.api.nvim_create_autocmd('LspAttach', {
          end, { buffer = bufnr, desc = "[lsp] format" })
       end
 
-        --- Guard against servers without the signatureHelper capability
-        if client.server_capabilities.signatureHelpProvider then
-           require('lsp-overloads').setup(client, { })
-           vim.keymap.set("n", "<A-s>", ":LspOverloadsSignature<CR>", { noremap = true, silent = true, buffer = bufnr })
-           vim.keymap.set("i", "<A-s>", "<cmd>LspOverloadsSignature<CR>", { noremap = true, silent = true, buffer = bufnr })
-        end
+      --- Guard against servers without the signatureHelper capability
+      if client.server_capabilities.signatureHelpProvider then
+         require('lsp-overloads').setup(client, {})
+         vim.keymap.set("n", "<A-s>", ":LspOverloadsSignature<CR>", { noremap = true, silent = true, buffer = bufnr })
+         vim.keymap.set("i", "<A-s>", "<cmd>LspOverloadsSignature<CR>", { noremap = true, silent = true, buffer = bufnr })
+      end
    end,
 })
 
@@ -75,7 +75,7 @@ mason_lsp.setup({
       "cssls",
       "tailwindcss",
       "svelte",
-      "emmet_ls",
+      "emmet_language_server",
       "pyright",
    },
    automatic_installation = true,
@@ -108,26 +108,26 @@ lspconfig["lua_ls"].setup {
    }
 }
 
- -- configure html server
- lspconfig["html"].setup({
+-- configure html server
+lspconfig["html"].setup({
    capabilities = lsp_capabilities,
    filetypes = { "html", "ejs" },
- })
+})
 
- -- configure typescript server with plugin
- lspconfig["tsserver"].setup({
+-- configure typescript server with plugin
+lspconfig["tsserver"].setup({
    capabilities = lsp_capabilities,
- })
+})
 
- -- configure css server
- lspconfig["cssls"].setup({
+-- configure css server
+lspconfig["cssls"].setup({
    capabilities = lsp_capabilities,
- })
+})
 
- -- configure tailwindcss server
- lspconfig["tailwindcss"].setup({
+-- configure tailwindcss server
+lspconfig["tailwindcss"].setup({
    capabilities = lsp_capabilities,
- })
+})
 
 -- configure svelte server
 lspconfig["svelte"].setup({
@@ -144,11 +144,15 @@ lspconfig["svelte"].setup({
    end,
 })
 
+lspconfig["vuels"].setup({
+   capabilities = lsp_capabilities
+})
+
 local configs = require('lspconfig/configs')
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 -- configure emmet language server
-lspconfig["emmet_ls"].setup({
+lspconfig["emmet_language_server"].setup({
    capabilities = lsp_capabilities,
    filetypes = { "html", "typescriptreact", "javascriptreact", "css", "sass", "scss", "less", "svelte", "ejs" },
    init_options = {
@@ -232,7 +236,7 @@ cmp.setup({
       end
    },
    sources = cmp.config.sources({
-      { name = "luasnip" },-- option = { use_show_condition = false } },
+      { name = "luasnip" }, -- option = { use_show_condition = false } },
       { name = "nvim_lsp" },
       { name = "nvim_lua" },
       { name = "path" },
