@@ -17,7 +17,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
       vim.keymap.set("n", "[d", function() vim.diagnostic.goto_next() end, opts)
       vim.keymap.set("n", "]d", function() vim.diagnostic.goto_prev() end, opts)
       vim.keymap.set("n", "<leader>vca", function() vim.lsp.buf.code_action() end, opts)
-      --vim.keymap.set("n", "<leader>vrr", function() vim.lsp.buf.references() end, opts)
+      vim.keymap.set("n", "<leader>vrr", function() vim.lsp.buf.references() end, opts)
       vim.keymap.set("n", "<leader>vrn", function() vim.lsp.buf.rename() end, opts)
       vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
       vim.keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts)
@@ -26,20 +26,25 @@ vim.api.nvim_create_autocmd('LspAttach', {
       local client = vim.lsp.get_client_by_id(args.data.client_id)
       if client.supports_method("textDocument/formatting") then
          vim.keymap.set("n", "<Leader>f", function()
-            vim.lsp.buf.format({ bufnr = vim.api.nvim_get_current_buf() })
+            -- vim.lsp.buf.format({ bufnr = vim.api.nvim_get_current_buf() })
+            require("conform").format({
+               lsp_fallback = true,
+               async = false,
+            })
          end, { buffer = bufnr, desc = "[lsp] format" })
-
-         -- format on save
-         -- vim.api.nvim_clear_autocmds({ buffer = bufnr, group = format_group })
-         -- vim.api.nvim_create_autocmd('BufWritePre', {
-         --    buffer = bufnr,
-         --    group = format_group,
-         --    callback = function()
-         --       vim.lsp.buf.format({ bufnr = bufnr, async = false })
-         --    end,
-         --    desc = "[lsp] format on save",
-         -- })
       end
+      --
+      --    -- format on save
+      --    vim.api.nvim_clear_autocmds({ buffer = bufnr, group = format_group })
+      --    vim.api.nvim_create_autocmd('BufWritePre', {
+      --       buffer = bufnr,
+      --       group = format_group,
+      --       callback = function()
+      --          vim.lsp.buf.format({ bufnr = bufnr, async = false })
+      --       end,
+      --       desc = "[lsp] format on save",
+      --    })
+      -- end
 
       if client.supports_method("textDocument/rangeFormatting") then
          vim.keymap.set("x", "<Leader>f", function()
@@ -81,10 +86,11 @@ mason_lsp.setup({
    automatic_installation = true,
 })
 --
--- Enables recogonizition of built-in Neovim symbols
 local lspconfig = require("lspconfig")
-local cmp_nvim_lsp = require("cmp_nvim_lsp")
-local lsp_capabilities = cmp_nvim_lsp.default_capabilities()
+-- local cmp_nvim_lsp = require("cmp_nvim_lsp")
+-- local lsp_capabilities = cmp_nvim_lsp.default_capabilities()
+local lsp_capabilities = vim.lsp.protocol.make_client_capabilities()
+lsp_capabilities.textDocument.completion.completionItem.snippetSupport = true
 
 mason_lsp.setup_handlers({
    function(server_name)
@@ -94,6 +100,19 @@ mason_lsp.setup_handlers({
    end
 })
 
+-- https://github.com/fredrikaverpil/dotfiles/blob/219cde0111c613154121a8b2c34956bda859ff9c/nvim-fredrik/lua/plugins/lsp.lua#L88-L96
+-- FIXME: workaround for https://github.com/neovim/neovim/issues/28058
+-- When working with go.work files, there's an error when opening a Go file
+local go_capabilities = vim.deepcopy(lsp_capabilities)
+go_capabilities.workspace.didChangeWatchedFiles = {
+   dynamicRegistration = false,
+   relativePatternSupport = false,
+}
+lspconfig["gopls"].setup({
+  capabilities = go_capabilities
+})
+
+-- Enables recogonizition of built-in Neovim symbols
 lspconfig["lua_ls"].setup {
    settings = {
       Lua = {
@@ -111,12 +130,13 @@ lspconfig["lua_ls"].setup {
 -- configure html server
 lspconfig["html"].setup({
    capabilities = lsp_capabilities,
-   filetypes = { "html", "ejs" },
+   filetypes = { "html", "ejs", "vue" },
 })
 
 -- configure typescript server with plugin
 lspconfig["tsserver"].setup({
    capabilities = lsp_capabilities,
+   filetypes = { "js", "ts", "vue", "html" }
 })
 
 -- configure css server
@@ -148,9 +168,6 @@ lspconfig["vuels"].setup({
    capabilities = lsp_capabilities
 })
 
-local configs = require('lspconfig/configs')
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities.textDocument.completion.completionItem.snippetSupport = true
 -- configure emmet language server
 lspconfig["emmet_language_server"].setup({
    capabilities = lsp_capabilities,
