@@ -28,6 +28,8 @@ vim.opt.iskeyword:append("-")
 vim.opt.updatetime = 50
 vim.opt.colorcolumn = "80"
 
+vim.opt.wildignore:append("node_modules/")
+
 vim.opt.cursorline = true
 vim.opt.guicursor = ""
 
