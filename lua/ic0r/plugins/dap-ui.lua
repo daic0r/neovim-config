@@ -1,5 +1,6 @@
 local M = {
    'rcarriga/nvim-dap-ui',
+   dependencies = { 'rcarriga/nvim-dap' }
 }
 
 M.config = function()

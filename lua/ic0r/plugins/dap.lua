@@ -1,6 +1,5 @@
 local M = {
    'mfussenegger/nvim-dap',
-   dependencies = { 'rcarriga/nvim-dap-ui' }
 }
 
 M.config = function()
