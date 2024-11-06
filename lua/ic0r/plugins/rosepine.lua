@@ -1,7 +1,8 @@
 return {
    'rose-pine/neovim',
    name = 'rose-pine',
-   priotity = 1000,
+   priority = 1000,
+   lazy = true,
    config = function()
       require('rose-pine').setup({
          disable_background = true,

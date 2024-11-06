@@ -24,6 +24,7 @@ require("lazy").setup({
          "hrsh7th/cmp-cmdline",
          enable = true,
       },
+      { 'hrsh7th/cmp-nvim-lsp-signature-help' },
       {
          'L3MON4D3/LuaSnip',
          dependencies = {
@@ -56,6 +57,18 @@ require("lazy").setup({
       'github/copilot.vim',
       'tpope/vim-surround',
       { "nvim-neotest/nvim-nio" },
+      {
+         dir = "~/programming/neovim/plugins/hashtags/",
+         config = function()
+            local hashtags = require('hashtags')
+            hashtags.setup()
+            vim.keymap.set('n', '<leader>hn', hashtags.nav_next)
+            vim.keymap.set('n', '<leader>hp', hashtags.nav_prev)
+            vim.keymap.set('n', '<leader>hs', hashtags.show_ui)
+         end,
+         dependencies = { "nvim-lua/plenary.nvim" },
+         dev = true
+      },
       -- {
       --    dir = "~/programming/neovim/plugins/dap-helper",
       --    config = function()
@@ -73,12 +86,10 @@ require("lazy").setup({
       {
          import = "ic0r.plugins"
       },
-      --[[
    {
       'daic0r/dap-helper.nvim',
       dependencies = { "rcarriga/nvim-dap-ui", "mfussenegger/nvim-dap" },
    }
-   --]]
       --[[
    {
       "m4xshen/hardtime.nvim",

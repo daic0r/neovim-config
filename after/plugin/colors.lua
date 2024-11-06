@@ -16,4 +16,4 @@ function SetColors(color)
    vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
 end
 
-SetColors("onedark_dark")
+--SetColors()

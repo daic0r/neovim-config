@@ -54,9 +54,9 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
       --- Guard against servers without the signatureHelper capability
       if client.server_capabilities.signatureHelpProvider then
-         require('lsp-overloads').setup(client, {})
-         vim.keymap.set("n", "<A-s>", ":LspOverloadsSignature<CR>", { noremap = true, silent = true, buffer = bufnr })
-         vim.keymap.set("i", "<A-s>", "<cmd>LspOverloadsSignature<CR>", { noremap = true, silent = true, buffer = bufnr })
+         -- require('lsp-overloads').setup(client, {})
+         -- vim.keymap.set("n", "<A-s>", ":LspOverloadsSignature<CR>", { noremap = true, silent = true, buffer = bufnr })
+         -- vim.keymap.set("i", "<A-s>", "<cmd>LspOverloadsSignature<CR>", { noremap = true, silent = true, buffer = bufnr })
       end
    end,
 })
@@ -259,6 +259,7 @@ cmp.setup({
       { name = "path" },
       { name = "buffer" },
       { name = "path" },
+      { name = "nvim_lsp_signature_help" },
    })
 })
 
